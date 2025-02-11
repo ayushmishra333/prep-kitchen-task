@@ -1,7 +1,11 @@
-import Head from "next/head";
-import Image from "next/image";
+import ProductList from "../components/ProductList";
 import { Geist, Geist_Mono } from "next/font/google";
-import styles from "@/styles/Home.module.css";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL) {
+  throw new Error("API URL is not defined in environment variables.");
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +17,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export async function getServerSideProps() {
+  const res = await fetch(`${API_URL}/products`);
+  const data = await res.json();
+
+  return {
+    props: { initialProducts: data.products },
+  };
+}
+
 export default function Home() {
   return (
-   <div>This is prep kitchen demo</div>
+    <div className={`${geistSans.variable} ${geistMono.variable}`}>
+      <ProductList />
+    </div>
   );
 }
