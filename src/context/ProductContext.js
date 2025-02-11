@@ -5,7 +5,7 @@ const ProductContext = createContext();
 const productReducer = (state, action) => {
   switch (action.type) {
     case "ADD":
-      return [...state, { id: Date.now(), ...action.payload }];
+      return [...state, action.payload];
 
     case "UPDATE":
       return state.map((p) =>

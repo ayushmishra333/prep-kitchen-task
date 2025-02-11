@@ -1,11 +1,6 @@
-import ProductList from "../components/ProductList";
+import ProductList from "@/components/ProductList";
+import { fetchProducts } from "@/lib/api";
 import { Geist, Geist_Mono } from "next/font/google";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-if (!API_URL) {
-  throw new Error("API URL is not defined in environment variables.");
-}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export async function getServerSideProps() {
-  const res = await fetch(`${API_URL}/products`);
-  const data = await res.json();
-
-  return {
-    props: { initialProducts: data.products },
-  };
+  try {
+    const data = await fetchProducts();
+    return { props: { initialProducts: data?.products ?? [] } };
+  } catch {
+    return { props: { initialProducts: [] } };
+  }
 }
 
 export default function Home() {
