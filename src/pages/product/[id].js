@@ -5,7 +5,8 @@ import Link from "next/link";
 export default function ProductDetail() {
     const { push, query } = useRouter();
     const { products, dispatch } = useProductContext();
-    const product = products.find((p) => p.id === parseInt(query.id));
+
+    const product = products.find((p) => String(p.id) === query.id);
 
     if (!product) return <p>Product not found.</p>;
 
@@ -13,7 +14,9 @@ export default function ProductDetail() {
         <div>
             <div>{product.title}</div>
             <div>£{product.price}</div>
+
             <div>{product.description}</div>
+
             <span>Brand</span> <span>{product.brand}</span>
             <span>Rating</span> <span>{product.rating}</span>
             <span>Current stock</span> <span>{product.stock}</span>
